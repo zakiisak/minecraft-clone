@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glm\CMakeFiles\b5b635fb6574ce7211c61cd2915df3e7\RUN_TESTS_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{AB60A0C5-E5E7-3141-A722-44F98D1F4872}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
