@@ -3,6 +3,7 @@
 #include "app.h"
 #include "graphics/camera.h"
 #include "block/chunk.h"
+#include "graphics/texture.h"
 
 namespace Game {
 	class MinecraftApp : public Core::App {
@@ -15,6 +16,7 @@ namespace Game {
 
 	private:
 		Shader* m_TriangleShader;
+		Texture* textureAtlas;
 		Camera camera;
 
 		Chunk* chunk;

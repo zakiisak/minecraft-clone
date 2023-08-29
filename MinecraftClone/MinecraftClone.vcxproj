@@ -71,19 +71,19 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\imgui-1.89.8;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glew-2.1.0\include;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glm;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glfw-3.3.8.bin.WIN64\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\stb_image;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\imgui-1.89.8;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glew-2.1.0\include;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glm;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glfw-3.3.8.bin.WIN64\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glew-2.1.0\lib\Release\x64;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glfw-3.3.8.bin.WIN64\lib-vc2022;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\imgui-1.89.8;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glew-2.1.0\include;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glm;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glfw-3.3.8.bin.WIN64\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\stb_image;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\imgui-1.89.8;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glew-2.1.0\include;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glm;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glfw-3.3.8.bin.WIN64\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glew-2.1.0\lib\Release\x64;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glfw-3.3.8.bin.WIN64\lib-vc2022;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\imgui-1.89.8;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glew-2.1.0\include;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glm;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glfw-3.3.8.bin.WIN64\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\stb_image;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\imgui-1.89.8;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glew-2.1.0\include;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glm;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glfw-3.3.8.bin.WIN64\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glew-2.1.0\lib\Release\x64;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glfw-3.3.8.bin.WIN64\lib-vc2022;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\imgui-1.89.8;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glew-2.1.0\include;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glm;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glfw-3.3.8.bin.WIN64\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\stb_image;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\imgui-1.89.8;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glew-2.1.0\include;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glm;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glfw-3.3.8.bin.WIN64\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glew-2.1.0\lib\Release\x64;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glfw-3.3.8.bin.WIN64\lib-vc2022;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -160,6 +160,7 @@
     <ClCompile Include="src\graphics\camera.cpp" />
     <ClCompile Include="src\graphics\instanced_cube_renderer.cpp" />
     <ClCompile Include="src\graphics\shader.cpp" />
+    <ClCompile Include="src\graphics\texture.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\minecraft_app.cpp" />
@@ -175,12 +176,14 @@
     <ClInclude Include="deps\imgui-1.89.8\imstb_rectpack.h" />
     <ClInclude Include="deps\imgui-1.89.8\imstb_textedit.h" />
     <ClInclude Include="deps\imgui-1.89.8\imstb_truetype.h" />
+    <ClInclude Include="deps\stb_image\stb_image.h" />
     <ClInclude Include="src\app.h" />
     <ClInclude Include="src\block\block.h" />
     <ClInclude Include="src\block\chunk.h" />
     <ClInclude Include="src\graphics\camera.h" />
     <ClInclude Include="src\graphics\instanced_cube_renderer.h" />
     <ClInclude Include="src\graphics\shader.h" />
+    <ClInclude Include="src\graphics\texture.h" />
     <ClInclude Include="src\graphics\vao.h" />
     <ClInclude Include="src\input.h" />
     <ClInclude Include="src\minecraft_app.h" />

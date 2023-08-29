@@ -13,42 +13,51 @@ namespace Game {
 		//m_Blocks = (uint8_t*) calloc(CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE, sizeof(float));
 		m_Blocks = new uint8_t[CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE];
 
+
 		for (int i = 0; i < CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE; i++)
 		{
-			m_Blocks[i] = 0;
+			m_Blocks[i] = rand() % 3;
 		}
 
-		for (int x = 0; x < 4; x++)
+
+		/*
+		for (int x = 1; x < CHUNK_SIZE - 1; x++)
 		{
-			for (int y = 0; y < 4; y++)
+			for (int y = 1; y < CHUNK_SIZE - 1; y++)
 			{
-				for (int z = 0; z < 4; z++)
+				for (int z = 1; z < CHUNK_SIZE - 1; z++)
 				{
-					setBlockAt(x, y, z, 1);
+					setBlockAt(x, y, z, rand() % 2);
 				}
 			}
 		}
+		*/
 
-		setBlockAt(0, 0, 0, 1);
-		setBlockAt(0, 1, 0, 1);
-
-		//Randomize the chunk with data
-
+		
 	}
 
 	Game::Chunk::~Chunk()
 	{
 		delete m_Blocks;
+		delete m_VertexBufferData;
+		delete m_ColorBufferData;
+		delete m_TexCoordBufferData;
+		glDeleteBuffers(1, &m_VertexBuffer);
+		glDeleteBuffers(1, &m_IndexBuffer);
+		glDeleteBuffers(1, &m_ColorBuffer);
+		glDeleteBuffers(1, &m_TexCoordBuffer);
 	}
 
 	void Chunk::initGraphics() {
 
-		m_VertexBufferData = new float[CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE * 12 * 3 * 3]; //2 triangles per face, and there are 6 faces = 12 triangles, with 3 floats each
-		m_ColorBufferData = new float[CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE * 12 * 3 * 3];
+		m_VertexBufferData = new float[CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE * 12 * 3]; //2 triangles per face, and there are 6 faces = 12 triangles, with 3 floats each
+		m_ColorBufferData = new float[CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE * 12 * 3];
+		m_TexCoordBufferData = new float[CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE * 12 * 4];
 
 		glGenBuffers(1, &m_VertexBuffer);
 		glGenBuffers(1, &m_IndexBuffer);
 		glGenBuffers(1, &m_ColorBuffer);
+		glGenBuffers(1, &m_TexCoordBuffer);
 	}
 
 	constexpr auto BLOCK_SIZE = 0.5f;
@@ -56,13 +65,13 @@ namespace Game {
 
 	void Chunk::addLeftFace() {
 		
-		addVerticesFromElementIndex(4);
-		addVerticesFromElementIndex(0);
-		addVerticesFromElementIndex(3);
+		addVerticesFromElementIndex(4, BlockFace::LEFT);
+		addVerticesFromElementIndex(0, BlockFace::LEFT);
+		addVerticesFromElementIndex(3, BlockFace::LEFT);
 
-		addVerticesFromElementIndex(3);
-		addVerticesFromElementIndex(7);
-		addVerticesFromElementIndex(4);
+		addVerticesFromElementIndex(3, BlockFace::LEFT);
+		addVerticesFromElementIndex(7, BlockFace::LEFT);
+		addVerticesFromElementIndex(4, BlockFace::LEFT);
 
 		/*
 		m_IndexBufferData[m_IndexBuferIndex++] = 4;
@@ -79,13 +88,13 @@ namespace Game {
 	void Chunk::addRightFace()
 	{
 
-		addVerticesFromElementIndex(1);
-		addVerticesFromElementIndex(5);
-		addVerticesFromElementIndex(6);
+		addVerticesFromElementIndex(1, BlockFace::RIGHT);
+		addVerticesFromElementIndex(5, BlockFace::RIGHT);
+		addVerticesFromElementIndex(6, BlockFace::RIGHT);
 
-		addVerticesFromElementIndex(6);
-		addVerticesFromElementIndex(2);
-		addVerticesFromElementIndex(1);
+		addVerticesFromElementIndex(6, BlockFace::RIGHT);
+		addVerticesFromElementIndex(2, BlockFace::RIGHT);
+		addVerticesFromElementIndex(1, BlockFace::RIGHT);
 
 		/*
 
@@ -101,13 +110,13 @@ namespace Game {
 
 	void Chunk::addTopFace()
 	{
-		addVerticesFromElementIndex(3);
-		addVerticesFromElementIndex(2);
-		addVerticesFromElementIndex(6);
+		addVerticesFromElementIndex(3, BlockFace::TOP);
+		addVerticesFromElementIndex(2, BlockFace::TOP);
+		addVerticesFromElementIndex(6, BlockFace::TOP);
 
-		addVerticesFromElementIndex(6);
-		addVerticesFromElementIndex(7);
-		addVerticesFromElementIndex(3);
+		addVerticesFromElementIndex(6, BlockFace::TOP);
+		addVerticesFromElementIndex(7, BlockFace::TOP);
+		addVerticesFromElementIndex(3, BlockFace::TOP);
 
 		/*
 
@@ -123,13 +132,13 @@ namespace Game {
 
 	void Chunk::addBottomFace()
 	{
-		addVerticesFromElementIndex(4);
-		addVerticesFromElementIndex(5);
-		addVerticesFromElementIndex(1);
+		addVerticesFromElementIndex(4, BlockFace::BOTTOM);
+		addVerticesFromElementIndex(5, BlockFace::BOTTOM);
+		addVerticesFromElementIndex(1, BlockFace::BOTTOM);
 
-		addVerticesFromElementIndex(1);
-		addVerticesFromElementIndex(0);
-		addVerticesFromElementIndex(4);
+		addVerticesFromElementIndex(1, BlockFace::BOTTOM);
+		addVerticesFromElementIndex(0, BlockFace::BOTTOM);
+		addVerticesFromElementIndex(4, BlockFace::BOTTOM);
 
 
 		/*
@@ -145,13 +154,13 @@ namespace Game {
 
 	void Chunk::addFrontFace()
 	{
-		addVerticesFromElementIndex(0);
-		addVerticesFromElementIndex(1);
-		addVerticesFromElementIndex(2);
+		addVerticesFromElementIndex(0, BlockFace::FRONT);
+		addVerticesFromElementIndex(1, BlockFace::FRONT);
+		addVerticesFromElementIndex(2, BlockFace::FRONT);
 
-		addVerticesFromElementIndex(2);
-		addVerticesFromElementIndex(3);
-		addVerticesFromElementIndex(0);
+		addVerticesFromElementIndex(2, BlockFace::FRONT);
+		addVerticesFromElementIndex(3, BlockFace::FRONT);
+		addVerticesFromElementIndex(0, BlockFace::FRONT);
 
 
 		/*
@@ -167,13 +176,13 @@ namespace Game {
 
 	void Chunk::addBackFace()
 	{
-		addVerticesFromElementIndex(7);
-		addVerticesFromElementIndex(6);
-		addVerticesFromElementIndex(5);
+		addVerticesFromElementIndex(7, BlockFace::BACK);
+		addVerticesFromElementIndex(6, BlockFace::BACK);
+		addVerticesFromElementIndex(5, BlockFace::BACK);
 
-		addVerticesFromElementIndex(5);
-		addVerticesFromElementIndex(4);
-		addVerticesFromElementIndex(7);
+		addVerticesFromElementIndex(5, BlockFace::BACK);
+		addVerticesFromElementIndex(4, BlockFace::BACK);
+		addVerticesFromElementIndex(7, BlockFace::BACK);
 
 		/*
 		m_IndexBufferData[m_IndexBuferIndex++] = 7;
@@ -199,7 +208,9 @@ namespace Game {
 		-1.0,  1.0, -1.0  //7
 	};
 
-	void Chunk::addVerticesFromElementIndex(int index)
+
+
+	void Chunk::addVerticesFromElementIndex(int index, BlockFace face)
 	{
 		m_VertexBufferData[m_VertexBufferIndex++] = cube_vertices[index * 3] * BLOCK_SIZE + m_ReusableBlockTranslation.x;
 		m_VertexBufferData[m_VertexBufferIndex++] = cube_vertices[index * 3 + 1] * BLOCK_SIZE + m_ReusableBlockTranslation.y;
@@ -208,6 +219,20 @@ namespace Game {
 		m_ColorBufferData[m_ColorBufferIndex++] = m_ReusableFaceColor.x;
 		m_ColorBufferData[m_ColorBufferIndex++] = m_ReusableFaceColor.y;
 		m_ColorBufferData[m_ColorBufferIndex++] = m_ReusableFaceColor.z;
+		
+		glm::vec4 uv = m_ReusableBlock->getTexCoord(face);
+		int indexXAppendage = 0, indexYAppendage = 1;
+		if (face == BlockFace::LEFT || face == BlockFace::RIGHT)
+		{
+			indexXAppendage = 2;
+		}
+		else if (face == BlockFace::TOP || face == BlockFace::BOTTOM)
+		{
+			indexYAppendage = 2;
+		}
+		m_TexCoordBufferData[m_TexCoordBufferIndex++] = uv.x + ((cube_vertices[index * 3 + indexXAppendage] + 1.0f) / 2.0f) * uv.z; //z being the width of the uv
+		m_TexCoordBufferData[m_TexCoordBufferIndex++] = uv.y + (1.0f - (cube_vertices[index * 3 + indexYAppendage] + 1.0f) / 2.0f) * uv.w;//W being the height of the uv
+
 	}
 
 
@@ -217,19 +242,24 @@ namespace Game {
 
 	void Chunk::build()
 	{
+		m_VertexBufferIndex = 0;
+		m_ColorBufferIndex = 0;
 
 		int x;
 		int y;
 		int z;
 		glm::vec3 offset = glm::vec3();
+		bool atLeastOneFacedAdded = false;
 		for (x = 0; x < CHUNK_SIZE; x++)
 		{
 			for (y = 0; y < CHUNK_SIZE; y++)
 			{
 				for (z = 0; z < CHUNK_SIZE; z++)
 				{
-					if (isBlockAir(x, y, z))
+					m_ReusableBlock = getBlockAt(x, y, z);
+					if (m_ReusableBlock == nullptr)
 						continue;
+					atLeastOneFacedAdded = false;
 
 					m_ReusableFaceColor = glm::vec3(randf(), randf(), randf());
 					offset.x = x;
@@ -238,22 +268,44 @@ namespace Game {
 					m_ReusableBlockTranslation = m_ChunkOffset + offset;
 
 					if (isBlockSolid(x, y, z - 1) == false)
-						addFrontFace();
+					{
+						addBackFace();
+						atLeastOneFacedAdded = true;
+					}
 
 					if (isBlockSolid(x + 1, y, z) == false)
+					{
 						addRightFace();
+						atLeastOneFacedAdded = true;
+					}
 
 					if (isBlockSolid(x, y, z + 1) == false)
-						addBackFace();
+					{
+						addFrontFace();
+						atLeastOneFacedAdded = true;
+					}
 
 					if (isBlockSolid(x - 1, y, z) == false)
+					{
 						addLeftFace();
+						atLeastOneFacedAdded = true;
+					}
 
 					if (isBlockSolid(x, y - 1, z) == false)
+					{
 						addBottomFace();
+						atLeastOneFacedAdded = true;
+					}
 
 					if (isBlockSolid(x, y + 1, z) == false)
+					{
 						addTopFace();
+						atLeastOneFacedAdded = true;
+					}
+
+					if (atLeastOneFacedAdded)
+					{
+					}
 
 
 
@@ -272,6 +324,9 @@ namespace Game {
 
 		glBindBuffer(GL_ARRAY_BUFFER, m_ColorBuffer);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m_ColorBufferIndex, m_ColorBufferData, GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_TexCoordBuffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m_TexCoordBufferIndex, m_TexCoordBufferData, GL_STATIC_DRAW);
 	}
 
 	void Chunk::render(const glm::mat4& projectionViewMatrix, GLuint mpvShaderLocation)
@@ -303,6 +358,18 @@ namespace Game {
 			0,                                // stride
 			(void*)0                          // array buffer offset
 		);
+
+		// 3rd attribute buffer : colors
+		glEnableVertexAttribArray(2);
+		glBindBuffer(GL_ARRAY_BUFFER, m_TexCoordBuffer);
+		glVertexAttribPointer(
+			2,                                // attribute. No particular reason for 1, but must match the layout in the shader.
+			2,                                // size
+			GL_FLOAT,                         // type
+			GL_FALSE,                         // normalized?
+			0,                                // stride
+			(void*)0                          // array buffer offset
+		);
 		
 
 		glDrawArrays(GL_TRIANGLES, 0, m_VertexBufferIndex / 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
@@ -322,6 +389,14 @@ namespace Game {
 		if (index < 0 || index >= CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE)
 			return 0;
 		return m_Blocks[index];
+	}
+
+	Block* Chunk::getBlockAt(int localX, int localY, int localZ)
+	{
+		uint8_t id = getBlockIdOfPosition(localX, localY, localZ);
+		if (id == 0)
+			return nullptr;
+		return Block::blocks[id];
 	}
 
 	uint8_t Chunk::getBlockIdOfPosition(int localX, int localY, int localZ)
@@ -347,13 +422,13 @@ namespace Game {
 
 	bool Chunk::isBlockAir(int localX, int localY, int localZ)
 	{
-		return getBlockIdOfPosition(localX, localY, localZ) == 0;
+		return Block::blocks[getBlockIdOfPosition(localX, localY, localZ)] != nullptr;
 	}
 
 	bool Chunk::isBlockSolid(int localX, int localY, int localZ)
 	{
 		//TODO Later check on the actual block reference to see if the given block is opaque or not
-		return getBlockIdOfPosition(localX, localY, localZ) > 0;
+		return getBlockIdOfPosition(localX, localY, localZ) != 0;
 	}
 
 }
