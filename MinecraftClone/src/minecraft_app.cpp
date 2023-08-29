@@ -23,6 +23,7 @@ namespace Game {
 	MinecraftApp::~MinecraftApp()
 	{
 		delete m_TriangleShader;
+		delete chunk;
 		App::~App();
 	}
 
@@ -109,7 +110,11 @@ namespace Game {
 
 	void MinecraftApp::create()
 	{
-		m_TriangleShader = new Shader("res/shaders/simple/simple_vertex.glsl", "res/shaders/simple/simple_fragment.glsl");
+		m_TriangleShader = new Shader("res/shaders/block/block_vertex.glsl", "res/shaders/block/block_fragment.glsl");
+
+		chunk = new Chunk(glm::vec3(0, 0, 0));
+		chunk->initGraphics();
+		chunk->build();
 
 
 		//VERTEX STUFF
@@ -130,6 +135,7 @@ namespace Game {
 
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
+		//glDisable(GL_CULL_FACE);
 		// Enable depth test
 		glEnable(GL_DEPTH_TEST);
 		// Accept fragment if it closer to the camera than the former one
@@ -171,6 +177,9 @@ namespace Game {
 
 		glm::mat4 projView = camera.getProjectionMatrix() * camera.getViewMatrix();
 
+		chunk->render(projView, matrixID);
+
+		/*
 		for (int x = 0; x < 8; x++)
 		{
 			for (int z = 0; z < 8; z++)
@@ -217,5 +226,8 @@ namespace Game {
 			}
 
 		}
+		*/
+
+
 	}
 }

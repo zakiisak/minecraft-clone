@@ -68,7 +68,7 @@ namespace Game {
 	{
 		glm::vec2 mouseDelta = Core::Input::getMouseDelta();
 
-		const float sensitivity = 8.0f;
+		const float sensitivity = 16.0f;
 		float delta = Core::App::Instance->deltaTime();
 		m_Yaw += mouseDelta.x * delta * sensitivity;
 		m_Pitch -= mouseDelta.y * delta * sensitivity;
