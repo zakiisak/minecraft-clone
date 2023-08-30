@@ -26,11 +26,10 @@ namespace Game {
 		void render(const glm::mat4& projectionViewMatrix, GLuint mpvShaderLocation);
 
 	private:
-		int m_RenderDistance = 6;
+		int m_RenderDistance = 8;
 		float m_LastTimeUpdatedChunks = 0;
 		std::unordered_map<glm::ivec2, Chunk*, ChunkKeyFuncs, ChunkKeyFuncs> m_Chunks;
 		std::unordered_map<glm::ivec2, Chunk*, ChunkKeyFuncs, ChunkKeyFuncs> m_ActiveChunks;
-		std::unordered_map<glm::ivec2, Chunk*, ChunkKeyFuncs, ChunkKeyFuncs> m_LastUsedChunks;
 
 		std::vector<glm::ivec2> m_ReusableVisibleChunkPositions;
 

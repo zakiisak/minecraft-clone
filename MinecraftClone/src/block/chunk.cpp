@@ -38,7 +38,8 @@ namespace Game {
 
 	Game::Chunk::~Chunk()
 	{
-		unloadGraphics();
+		unload();
+		delete[] m_Blocks;
 	}
 
 	glm::vec2 Chunk::getChunkPosition(glm::vec3 worldPosition)
@@ -53,6 +54,9 @@ namespace Game {
 	}
 
 	void Chunk::loadGraphics() {
+		if (m_Initialized)
+			return;
+
 		m_Initialized = true;
 
 		m_VertexBufferData = new float[CHUNK_SIZE * CHUNK_HEIGHT * CHUNK_SIZE * 12 * 3 * 3]; //2 triangles per face, and there are 6 faces = 12 triangles, with 3 floats each
@@ -65,16 +69,18 @@ namespace Game {
 		glGenBuffers(1, &m_TexCoordBuffer);
 	}
 
-	void Chunk::unloadGraphics()
+	void Chunk::unload()
 	{
-		delete m_Blocks;
-		delete m_VertexBufferData;
-		delete m_ColorBufferData;
-		delete m_TexCoordBufferData;
+		if (m_Initialized == false)
+			return;
+
 		glDeleteBuffers(1, &m_VertexBuffer);
 		glDeleteBuffers(1, &m_IndexBuffer);
 		glDeleteBuffers(1, &m_ColorBuffer);
 		glDeleteBuffers(1, &m_TexCoordBuffer);
+		delete[] m_VertexBufferData;
+		delete[] m_ColorBufferData;
+		delete[] m_TexCoordBufferData;
 		m_Initialized = false;
 	}
 
@@ -268,6 +274,7 @@ namespace Game {
 
 		m_VertexBufferIndex = 0;
 		m_ColorBufferIndex = 0;
+		m_TexCoordBufferIndex = 0;
 
 		int x;
 		int y;
@@ -340,7 +347,7 @@ namespace Game {
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m_TexCoordBufferIndex, m_TexCoordBufferData, GL_STATIC_DRAW);
 	}
 
-	bool Chunk::isReady()
+	bool Chunk::isLoaded()
 	{
 		return m_Initialized;
 	}

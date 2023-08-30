@@ -20,20 +20,30 @@ namespace Game {
 
 	void ChunkManager::updateActiveChunks(glm::vec3 cameraPosition)
 	{
-		m_LastUsedChunks.clear();
+		glm::ivec2 chunkPosition = Chunk::getChunkPosition(cameraPosition + glm::vec3(CHUNK_SIZE / 2, 0, CHUNK_SIZE / 2));
+		int startChunkX = chunkPosition.x - m_RenderDistance / 2;
+		int startChunkZ = chunkPosition.y - m_RenderDistance / 2;
+		int endChunkX = chunkPosition.x + m_RenderDistance / 2 - 1;
+		int endChunkZ = chunkPosition.y + m_RenderDistance / 2;
+
 		for (auto pair : m_ActiveChunks)
 		{
-			m_LastUsedChunks[pair.first] = pair.second;
+			int x = pair.first.x;
+			int z = pair.first.y;
+			if (x < startChunkX || x > endChunkX || z < startChunkZ || z > endChunkZ)
+			{
+				if (pair.second->isLoaded())
+					pair.second->unload();
+			}
 		}
-
 		m_ActiveChunks.clear();
+
 		m_ReusableVisibleChunkPositions.clear();
 
-		glm::ivec2 chunkPosition = Chunk::getChunkPosition(cameraPosition);
 
-		for (int x = chunkPosition.x - m_RenderDistance / 2; x < chunkPosition.x + m_RenderDistance / 2; x++)
+		for (int x = startChunkX; x < endChunkX + 1; x++)
 		{
-			for (int z = chunkPosition.y - m_RenderDistance / 2; z < chunkPosition.y + m_RenderDistance / 2; z++)
+			for (int z = startChunkZ; z < endChunkZ; z++)
 			{
 				glm::ivec2 chunkKey = glm::ivec2(x, z);
 				Chunk* chunk;
@@ -46,21 +56,12 @@ namespace Game {
 				else
 				{
 					chunk = m_Chunks[chunkKey];
-					if (chunk->isReady() == false)
+					if (chunk->isLoaded() == false)
 						chunk->build();
 				}
 				m_ActiveChunks[chunkKey] = chunk;
 			}
 		}
-
-		for (auto pair : m_LastUsedChunks)
-		{
-			if (m_ActiveChunks.find(pair.first) == m_ActiveChunks.end())
-			{
-				pair.second->unloadGraphics();
-			}
-		}
-
 
 	}
 

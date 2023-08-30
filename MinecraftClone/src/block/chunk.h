@@ -18,9 +18,9 @@ namespace Game {
 		static glm::vec3 getWorldPosition(glm::ivec2 chunkPosition);
 
 		void loadGraphics();
-		void unloadGraphics();
+		void unload();
 		void build();
-		bool isReady();
+		bool isLoaded();
 		void render(const glm::mat4& projectionViewMatrix, GLuint mpvShaderLocation);
 
 		uint8_t getBlockIdOfIndex(int index);

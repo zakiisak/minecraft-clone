@@ -47,6 +47,8 @@ namespace Game {
 		// Accept fragment if it closer to the camera than the former one
 		glDepthFunc(GL_LESS);
 
+		glfwSwapInterval(0);
+
 		camera.position = glm::vec3(0, 0, -10);
 
 		glfwSetInputMode(m_Window->getHandle(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
