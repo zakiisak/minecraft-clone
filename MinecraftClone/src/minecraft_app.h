@@ -4,6 +4,7 @@
 #include "graphics/camera.h"
 #include "block/chunk.h"
 #include "graphics/texture.h"
+#include "block/chunk_manager.h"
 
 namespace Game {
 	class MinecraftApp : public Core::App {
@@ -19,7 +20,7 @@ namespace Game {
 		Texture* textureAtlas;
 		Camera camera;
 
-		Chunk* chunk;
+		ChunkManager chunkManager;
 
 
 		//Temp stuff

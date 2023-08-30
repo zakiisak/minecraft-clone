@@ -6,6 +6,7 @@
 #include "block.h"
 
 #define CHUNK_SIZE 16
+#define CHUNK_HEIGHT 16
 
 namespace Game {
 	class Chunk {
@@ -13,11 +14,17 @@ namespace Game {
 		Chunk(const glm::vec3& offset);
 		~Chunk();
 
-		void initGraphics();
+		static glm::vec2 getChunkPosition(glm::vec3 worldPosition);
+		static glm::vec3 getWorldPosition(glm::ivec2 chunkPosition);
+
+		void loadGraphics();
+		void unloadGraphics();
 		void build();
+		bool isReady();
 		void render(const glm::mat4& projectionViewMatrix, GLuint mpvShaderLocation);
 
 		uint8_t getBlockIdOfIndex(int index);
+		Block* getBlockAtIndex(int index);
 		Block* getBlockAt(int localX, int localY, int localZ);
 		uint8_t getBlockIdOfPosition(int localX, int localY, int localZ);
 		
@@ -33,6 +40,10 @@ namespace Game {
 		GLuint m_ColorBuffer;
 		GLuint m_TexCoordBuffer;
 		GLuint m_IndexBuffer;
+
+		bool m_Initialized = false;
+		float m_TimeWhenLastBuilt;
+		bool m_Dirty = true;
 
 		float* m_VertexBufferData;
 		uint32_t m_VertexBufferIndex = 0; //Count of floats

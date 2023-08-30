@@ -157,6 +157,7 @@
     <ClCompile Include="src\app.cpp" />
     <ClCompile Include="src\block\block.cpp" />
     <ClCompile Include="src\block\chunk.cpp" />
+    <ClCompile Include="src\block\chunk_manager.cpp" />
     <ClCompile Include="src\graphics\camera.cpp" />
     <ClCompile Include="src\graphics\instanced_cube_renderer.cpp" />
     <ClCompile Include="src\graphics\shader.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="src\app.h" />
     <ClInclude Include="src\block\block.h" />
     <ClInclude Include="src\block\chunk.h" />
+    <ClInclude Include="src\block\chunk_manager.h" />
     <ClInclude Include="src\graphics\camera.h" />
     <ClInclude Include="src\graphics\instanced_cube_renderer.h" />
     <ClInclude Include="src\graphics\shader.h" />

@@ -24,28 +24,24 @@ namespace Game {
 	MinecraftApp::~MinecraftApp()
 	{
 		delete m_TriangleShader;
-		delete chunk;
 		delete textureAtlas;
-		App::~App();
+		//App::~App(); -- seems that we don't have to call base destructors, as they are called automatically
 	}
 
 	void MinecraftApp::create()
 	{
+		//srand(time(NULL));
+
 		m_TriangleShader = new Shader("res/shaders/block/block_vertex.glsl", "res/shaders/block/block_fragment.glsl");
 
 		Block::loadBlocks();
 
 		textureAtlas = new Texture("res/textureAtlas.jpg");
 
-		chunk = new Chunk(glm::vec3(0, 0, 0));
-		chunk->initGraphics();
-		chunk->build();
 
-
-
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
-		//glDisable(GL_CULL_FACE);
+		//glEnable(GL_CULL_FACE);
+		//glCullFace(GL_BACK);
+		glDisable(GL_CULL_FACE);
 		// Enable depth test
 		glEnable(GL_DEPTH_TEST);
 		// Accept fragment if it closer to the camera than the former one
@@ -72,6 +68,8 @@ namespace Game {
 		camera.controlMovement();
 		camera.controlPitchAndYaw();
 
+		chunkManager.update(camera.position, deltaTime());
+
 	}
 
 	void MinecraftApp::render() {
@@ -89,6 +87,7 @@ namespace Game {
 		glm::mat4 projView = camera.getProjectionMatrix() * camera.getViewMatrix();
 
 		textureAtlas->bind();
-		chunk->render(projView, matrixID);
+		//chunk->render(projView, matrixID);
+		chunkManager.render(projView, matrixID);
 	}
 }

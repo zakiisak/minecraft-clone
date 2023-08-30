@@ -25,7 +25,7 @@ namespace Game {
 		void setTexCoord(BlockFace face, glm::vec4 texCoord);
 	private:
 		bool m_Solid;
-		bool m_Opaque;
+		bool m_Opaque = true;
 		glm::vec3 m_Color;
 		glm::vec4 m_TexCoords[6];
 	};

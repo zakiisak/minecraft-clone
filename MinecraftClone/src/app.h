@@ -11,7 +11,6 @@ namespace Core {
 		std::string title;
 		int width;
 		int height;
-
 		int msaaSamples;
 	};
 
@@ -21,6 +20,9 @@ namespace Core {
 		~App();
 
 		static App* Instance;
+		static float getTime();
+		static float getDeltaTime();
+
 
 		virtual void create();
 		virtual void render();

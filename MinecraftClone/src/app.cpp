@@ -17,6 +17,15 @@ namespace Core {
 
 	App* App::Instance;
 
+	float App::getTime()
+	{
+		return (float)glfwGetTime();
+	}
+
+	float App::getDeltaTime() {
+		return Instance->m_Delta;
+	}
+
 	App::App(AppConfig config)
 	{
 		this->m_Config = config;

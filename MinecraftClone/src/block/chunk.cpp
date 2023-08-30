@@ -1,42 +1,71 @@
 #include "chunk.h"
 #include <glm/gtx/common.hpp>
 #include <stdlib.h>     /* srand, rand */
-#include <time.h>       /* time */
+#include "../app.h"
 
 namespace Game {
 
 	Game::Chunk::Chunk(const glm::vec3& offset)
 	{
-		srand(time(NULL));
-
 		m_ChunkOffset = offset;
 		//m_Blocks = (uint8_t*) calloc(CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE, sizeof(float));
-		m_Blocks = new uint8_t[CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE];
+		m_Blocks = new uint8_t[CHUNK_SIZE * CHUNK_HEIGHT * CHUNK_SIZE];
 
-
-		for (int i = 0; i < CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE; i++)
+		
+		for (int i = 0; i < CHUNK_SIZE * CHUNK_HEIGHT * CHUNK_SIZE; i++)
 		{
 			m_Blocks[i] = rand() % 3;
 		}
 
 
 		/*
-		for (int x = 1; x < CHUNK_SIZE - 1; x++)
+		for (int x = 1; x < CHUNK_SIZE; x++)
 		{
-			for (int y = 1; y < CHUNK_SIZE - 1; y++)
+			for (int y = 1; y < CHUNK_HEIGHT; y++)
 			{
-				for (int z = 1; z < CHUNK_SIZE - 1; z++)
+				for (int z = 1; z < CHUNK_SIZE; z++)
 				{
-					setBlockAt(x, y, z, rand() % 2);
+					setBlockAt(x, y, z, 2);
 				}
 			}
-		}
-		*/
+		}*/
 
-		
+		/*
+		glPolygonMode(GL_FRONT, GL_LINE);
+		glPolygonMode(GL_BACK, GL_LINE);
+		*/
 	}
 
 	Game::Chunk::~Chunk()
+	{
+		unloadGraphics();
+	}
+
+	glm::vec2 Chunk::getChunkPosition(glm::vec3 worldPosition)
+	{
+		glm::ivec2 chunkPosition((int) (worldPosition.x / CHUNK_SIZE), (int) (worldPosition.z / CHUNK_SIZE));
+		return chunkPosition;
+	}
+
+	glm::vec3 Chunk::getWorldPosition(glm::ivec2 chunkPosition)
+	{
+		return glm::vec3(chunkPosition.x * CHUNK_SIZE, 0, chunkPosition.y * CHUNK_SIZE);
+	}
+
+	void Chunk::loadGraphics() {
+		m_Initialized = true;
+
+		m_VertexBufferData = new float[CHUNK_SIZE * CHUNK_HEIGHT * CHUNK_SIZE * 12 * 3 * 3]; //2 triangles per face, and there are 6 faces = 12 triangles, with 3 floats each
+		m_ColorBufferData = new float[CHUNK_SIZE * CHUNK_HEIGHT * CHUNK_SIZE * 12 * 3 * 3];
+		m_TexCoordBufferData = new float[CHUNK_SIZE * CHUNK_HEIGHT * CHUNK_SIZE * 12 * 3 * 4];
+
+		glGenBuffers(1, &m_VertexBuffer);
+		glGenBuffers(1, &m_IndexBuffer);
+		glGenBuffers(1, &m_ColorBuffer);
+		glGenBuffers(1, &m_TexCoordBuffer);
+	}
+
+	void Chunk::unloadGraphics()
 	{
 		delete m_Blocks;
 		delete m_VertexBufferData;
@@ -46,18 +75,7 @@ namespace Game {
 		glDeleteBuffers(1, &m_IndexBuffer);
 		glDeleteBuffers(1, &m_ColorBuffer);
 		glDeleteBuffers(1, &m_TexCoordBuffer);
-	}
-
-	void Chunk::initGraphics() {
-
-		m_VertexBufferData = new float[CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE * 12 * 3]; //2 triangles per face, and there are 6 faces = 12 triangles, with 3 floats each
-		m_ColorBufferData = new float[CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE * 12 * 3];
-		m_TexCoordBufferData = new float[CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE * 12 * 4];
-
-		glGenBuffers(1, &m_VertexBuffer);
-		glGenBuffers(1, &m_IndexBuffer);
-		glGenBuffers(1, &m_ColorBuffer);
-		glGenBuffers(1, &m_TexCoordBuffer);
+		m_Initialized = false;
 	}
 
 	constexpr auto BLOCK_SIZE = 0.5f;
@@ -242,6 +260,12 @@ namespace Game {
 
 	void Chunk::build()
 	{
+		if (m_Initialized == false)
+		{
+			loadGraphics();
+		}
+		m_TimeWhenLastBuilt = Core::App::getTime();
+
 		m_VertexBufferIndex = 0;
 		m_ColorBufferIndex = 0;
 
@@ -252,7 +276,7 @@ namespace Game {
 		bool atLeastOneFacedAdded = false;
 		for (x = 0; x < CHUNK_SIZE; x++)
 		{
-			for (y = 0; y < CHUNK_SIZE; y++)
+			for (y = 0; y < CHUNK_HEIGHT; y++)
 			{
 				for (z = 0; z < CHUNK_SIZE; z++)
 				{
@@ -270,45 +294,32 @@ namespace Game {
 					if (isBlockSolid(x, y, z - 1) == false)
 					{
 						addBackFace();
-						atLeastOneFacedAdded = true;
 					}
 
 					if (isBlockSolid(x + 1, y, z) == false)
 					{
 						addRightFace();
-						atLeastOneFacedAdded = true;
 					}
 
 					if (isBlockSolid(x, y, z + 1) == false)
 					{
 						addFrontFace();
-						atLeastOneFacedAdded = true;
 					}
 
 					if (isBlockSolid(x - 1, y, z) == false)
 					{
 						addLeftFace();
-						atLeastOneFacedAdded = true;
 					}
 
 					if (isBlockSolid(x, y - 1, z) == false)
 					{
 						addBottomFace();
-						atLeastOneFacedAdded = true;
 					}
 
 					if (isBlockSolid(x, y + 1, z) == false)
 					{
 						addTopFace();
-						atLeastOneFacedAdded = true;
 					}
-
-					if (atLeastOneFacedAdded)
-					{
-					}
-
-
-
 				}
 			}
 		}
@@ -327,6 +338,11 @@ namespace Game {
 
 		glBindBuffer(GL_ARRAY_BUFFER, m_TexCoordBuffer);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m_TexCoordBufferIndex, m_TexCoordBufferData, GL_STATIC_DRAW);
+	}
+
+	bool Chunk::isReady()
+	{
+		return m_Initialized;
 	}
 
 	void Chunk::render(const glm::mat4& projectionViewMatrix, GLuint mpvShaderLocation)
@@ -386,9 +402,16 @@ namespace Game {
 
 	uint8_t Chunk::getBlockIdOfIndex(int index)
 	{
-		if (index < 0 || index >= CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE)
+		if (index < 0 || index >= CHUNK_SIZE * CHUNK_HEIGHT * CHUNK_SIZE)
 			return 0;
 		return m_Blocks[index];
+	}
+
+	Block* Chunk::getBlockAtIndex(int index)
+	{
+		if (index < 0 || index >= CHUNK_SIZE * CHUNK_HEIGHT * CHUNK_SIZE)
+			return nullptr;
+		return Block::blocks[m_Blocks[index]];
 	}
 
 	Block* Chunk::getBlockAt(int localX, int localY, int localZ)
@@ -401,18 +424,19 @@ namespace Game {
 
 	uint8_t Chunk::getBlockIdOfPosition(int localX, int localY, int localZ)
 	{
-		int index = localX + localY * CHUNK_SIZE + localZ * CHUNK_SIZE * CHUNK_SIZE;
-		if (index < 0 || index >= CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE)
+		int index = (localX * CHUNK_SIZE * CHUNK_HEIGHT) + (localY * CHUNK_HEIGHT) + CHUNK_SIZE;
+		if (index < 0 || index >= CHUNK_SIZE * CHUNK_HEIGHT * CHUNK_SIZE)
 			return 0;
 		return m_Blocks[index];
 	}
 
 	void Chunk::setBlockAt(int localX, int localY, int localZ, uint8_t blockId)
 	{
-		int index = localX + localY * CHUNK_SIZE + localZ * CHUNK_SIZE * CHUNK_SIZE;
-		if (index < 0 || index >= CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE)
+		int index = (localX * CHUNK_SIZE * CHUNK_HEIGHT) + (localY * CHUNK_HEIGHT) + CHUNK_SIZE;
+		if (index < 0 || index >= CHUNK_SIZE * CHUNK_HEIGHT * CHUNK_SIZE)
 			return;
 		m_Blocks[index] = blockId;
+		m_Dirty = true;
 	}
 
 	glm::vec3 Chunk::getPositionOffset()
@@ -427,8 +451,10 @@ namespace Game {
 
 	bool Chunk::isBlockSolid(int localX, int localY, int localZ)
 	{
-		//TODO Later check on the actual block reference to see if the given block is opaque or not
-		return getBlockIdOfPosition(localX, localY, localZ) != 0;
+		Block* block = getBlockAt(localX, localY, localZ);
+		if (block == nullptr)
+			return false;
+		return block->isOpaque();
 	}
 
 }
