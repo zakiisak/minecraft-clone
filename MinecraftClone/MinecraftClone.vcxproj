@@ -29,26 +29,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -71,20 +71,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\stb_image;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\imgui-1.89.8;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glew-2.1.0\include;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glm;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glfw-3.3.8.bin.WIN64\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glew-2.1.0\lib\Release\x64;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glfw-3.3.8.bin.WIN64\lib-vc2022;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)\deps\stb_image;$(ProjectDir)\deps\imgui-1.89.8;$(ProjectDir)\deps\glew-2.1.0\include;$(ProjectDir)\deps\glm;$(ProjectDir)\deps\glfw-3.3.8.bin.WIN64\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)deps\glew-2.1.0\lib\Release\x64;$(ProjectDir)deps\glfw-3.3.8.bin.WIN64\lib-vc2022;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\stb_image;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\imgui-1.89.8;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glew-2.1.0\include;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glm;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glfw-3.3.8.bin.WIN64\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glew-2.1.0\lib\Release\x64;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glfw-3.3.8.bin.WIN64\lib-vc2022;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)\deps\stb_image;$(ProjectDir)\deps\imgui-1.89.8;$(ProjectDir)\deps\glew-2.1.0\include;$(ProjectDir)\deps\glm;$(ProjectDir)\deps\glfw-3.3.8.bin.WIN64\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)deps\glew-2.1.0\lib\Release\x64;$(ProjectDir)deps\glfw-3.3.8.bin.WIN64\lib-vc2022;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\stb_image;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\imgui-1.89.8;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glew-2.1.0\include;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glm;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glfw-3.3.8.bin.WIN64\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glew-2.1.0\lib\Release\x64;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glfw-3.3.8.bin.WIN64\lib-vc2022;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)\deps\stb_image;$(ProjectDir)\deps\imgui-1.89.8;$(ProjectDir)\deps\glew-2.1.0\include;$(ProjectDir)\deps\glm;$(ProjectDir)\deps\glfw-3.3.8.bin.WIN64\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)deps\glew-2.1.0\lib\Release\x64;$(ProjectDir)deps\glfw-3.3.8.bin.WIN64\lib-vc2022;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\stb_image;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\imgui-1.89.8;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glew-2.1.0\include;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glm;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glfw-3.3.8.bin.WIN64\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glew-2.1.0\lib\Release\x64;C:\Users\Isak\source\repos\MinecraftClone\MinecraftClone\deps\glfw-3.3.8.bin.WIN64\lib-vc2022;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)\deps\stb_image;$(ProjectDir)\deps\imgui-1.89.8;$(ProjectDir)\deps\glew-2.1.0\include;$(ProjectDir)\deps\glm;$(ProjectDir)\deps\glfw-3.3.8.bin.WIN64\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)deps\glew-2.1.0\lib\Release\x64;$(ProjectDir)deps\glfw-3.3.8.bin.WIN64\lib-vc2022;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
