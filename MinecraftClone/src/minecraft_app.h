@@ -15,8 +15,11 @@ namespace Game {
 		void update() override;
 		void render() override;
 
+		void ssaoPass();
+
 	private:
 		Shader* m_Shader;
+		Shader* m_SSAOGeometryShader;
 		Texture* textureAtlas;
 		Camera camera;
 

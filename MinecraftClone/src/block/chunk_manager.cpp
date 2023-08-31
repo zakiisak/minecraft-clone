@@ -18,6 +18,7 @@ namespace Game {
 		}
 	}
 
+	//Needs to be fixed, as it isn't very happy with negative numbers
 	Block* ChunkManager::getBlockAt(int worldX, int worldY, int worldZ)
 	{
 		glm::ivec2 chunkPosition = glm::ivec2(worldX / CHUNK_SIZE, worldZ / CHUNK_SIZE);
@@ -30,6 +31,65 @@ namespace Game {
 			return m_Chunks[chunkPosition]->getBlockAt(localX, worldY, localZ);
 		}
 	}
+
+	//Needs to be fixed, as it isn't very happy with negative numbers
+	bool ChunkManager::setBlockAt(int worldX, int worldY, int worldZ, uint8_t id)
+	{
+		glm::ivec2 chunkPosition = glm::ivec2(worldX / CHUNK_SIZE, worldZ / CHUNK_SIZE);
+
+		if (m_Chunks.find(chunkPosition) != m_Chunks.end())
+		{
+			int localX = worldX - chunkPosition.x * CHUNK_SIZE;
+			int localZ = worldZ - chunkPosition.y * CHUNK_SIZE;
+			//At the moement, there is only 1 "y" layer of chunks
+			m_Chunks[chunkPosition]->setBlockAt(localX, worldY, localZ, id);
+			m_Chunks[chunkPosition]->build();
+			return true;
+		}
+		return false;
+	}
+
+	Block* ChunkManager::castRay(glm::vec3 eye, glm::vec3 direction, int maxDistance)
+	{
+		glm::vec3 point = eye;
+		float stepSize = 0.1f;
+		Block* blockAt;
+
+		glm::vec3 increment = direction * stepSize;
+
+		//Max distance in blocks
+		for (float i = 0; i < maxDistance; i += stepSize)
+		{
+			point += increment;
+			blockAt = getBlockAt((int)point.x, (int)point.y, (int)point.z);
+			if (blockAt != nullptr)
+				return blockAt;
+		}
+		return nullptr;
+	}
+
+	bool ChunkManager::castRaySetBlock(glm::vec3 eye, glm::vec3 direction, uint8_t blockId, int maxDistance)
+	{
+		glm::vec3 point = eye;
+		float stepSize = 0.1f;
+		Block* blockAt;
+
+		glm::vec3 increment = direction * stepSize;
+
+		//Max distance in blocks
+		for (float i = 0; i < maxDistance; i += stepSize)
+		{
+			point += increment;
+			blockAt = getBlockAt((int)point.x, (int)point.y, (int)point.z);
+			if (blockAt != nullptr)
+			{
+				setBlockAt((int)point.x, (int)point.y, (int)point.z, blockId);
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 	void ChunkManager::updateActiveChunks(glm::vec3 cameraPosition)
 	{

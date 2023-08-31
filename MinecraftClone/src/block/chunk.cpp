@@ -429,7 +429,7 @@ namespace Game {
 
 	uint8_t Chunk::getBlockIdOfPosition(int localX, int localY, int localZ)
 	{
-		int index = (localX * CHUNK_SIZE * CHUNK_HEIGHT) + (localY * CHUNK_HEIGHT) + localZ;
+		int index = localX * CHUNK_SIZE * CHUNK_HEIGHT + localY + localZ * CHUNK_HEIGHT;
 		//if (index < 0 || index >= CHUNK_SIZE * CHUNK_HEIGHT * CHUNK_SIZE)
 		if(localX < 0 || localX >= CHUNK_SIZE || localY < 0 || localY >= CHUNK_HEIGHT || localZ < 0 || localZ >= CHUNK_SIZE)
 		{
@@ -440,7 +440,7 @@ namespace Game {
 
 	void Chunk::setBlockAt(int localX, int localY, int localZ, uint8_t blockId)
 	{
-		int index = (localX * CHUNK_SIZE * CHUNK_HEIGHT) + (localY * CHUNK_HEIGHT) + localZ;
+		int index = localX * CHUNK_SIZE * CHUNK_HEIGHT + localY + localZ * CHUNK_HEIGHT;
 		if (localX < 0 || localX >= CHUNK_SIZE || localY < 0 || localY >= CHUNK_HEIGHT || localZ < 0 || localZ >= CHUNK_SIZE)
 		{
 			return;

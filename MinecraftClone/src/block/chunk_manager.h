@@ -32,9 +32,12 @@ namespace Game {
 		//May return null if the given location is within a chunk that hasn't yet been generated
 		//or the given id is not registered
 		Block* getBlockAt(int worldX, int worldY, int worldZ);
+		bool setBlockAt(int worldX, int worldY, int worldZ, uint8_t id);
+		Block* castRay(glm::vec3 eye, glm::vec3 direction, int maxDistance = 20);
+		bool castRaySetBlock(glm::vec3 eye, glm::vec3 direction, uint8_t blockId, int maxDistance = 20);
 
 	private:
-		int m_RenderDistance = 8;
+		int m_RenderDistance = 4;
 		float m_LastTimeUpdatedChunks = 0;
 		std::unordered_map<glm::ivec2, Chunk*, ChunkKeyFuncs, ChunkKeyFuncs> m_Chunks;
 		std::unordered_map<glm::ivec2, Chunk*, ChunkKeyFuncs, ChunkKeyFuncs> m_ActiveChunks;

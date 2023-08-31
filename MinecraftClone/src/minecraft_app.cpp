@@ -24,6 +24,7 @@ namespace Game {
 	MinecraftApp::~MinecraftApp()
 	{
 		delete m_Shader;
+		delete m_SSAOGeometryShader;
 		delete textureAtlas;
 		//App::~App(); -- seems that we don't have to call base destructors, as they are called automatically
 	}
@@ -33,6 +34,7 @@ namespace Game {
 		//srand(time(NULL));
 
 		m_Shader = new Shader("res/shaders/block/block_vertex.glsl", "res/shaders/block/block_fragment.glsl");
+		m_SSAOGeometryShader = new Shader("res/shaders/ssao/geometry_pass_vertex.glsl", "res/shaders/ssao/geometry_pass_fragment.glsl");
 
 		Block::loadBlocks();
 
@@ -94,6 +96,13 @@ namespace Game {
 		ImGui::Text("position: %f, %f, %f", camera.position.x, camera.position.y, camera.position.z);
 		ImGui::Text("pitch: %f, yaw: %f", camera.m_Pitch, camera.m_Yaw);
 		ImGui::Text("Fps: %f", getFps());
+		ImGui::Text("Block: %f", chunkManager.castRay(camera.position, glm::normalize(camera.look)) == nullptr ? 0.0f : 1.0f);
+
+		if (Core::Input::isMouseButtonJustPressed(0))
+		{
+			chunkManager.castRaySetBlock(camera.position, glm::normalize(camera.look), 0);
+		}
+		
 
 		m_Shader->enable();
 		GLuint matrixID = glGetUniformLocation(m_Shader->getProgram(), "MVP");
@@ -106,4 +115,11 @@ namespace Game {
 		//chunk->render(projView, matrixID);
 		chunkManager.render(projView, matrixID);
 	}
+
+	void MinecraftApp::ssaoPass()
+	{
+		//https://ogldev.org/www/tutorial45/tutorial45.html
+	}
+
+
 }

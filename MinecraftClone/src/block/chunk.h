@@ -10,7 +10,7 @@ namespace Game {
 #include "chunk_manager.h"
 
 #define CHUNK_SIZE 16
-#define CHUNK_HEIGHT 16
+#define CHUNK_HEIGHT 64
 
 namespace Game {
 	class Chunk {
