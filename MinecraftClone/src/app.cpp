@@ -63,6 +63,7 @@ namespace Core {
 			Input input(*m_Window);
 
 			m_Window->assignGLContext();
+			glfwSwapInterval(m_Config.vsync ? 1 : 0);
 
 			if (glewInit() != GLEW_OK)
 			{

@@ -12,6 +12,7 @@ namespace Core {
 		int width;
 		int height;
 		int msaaSamples;
+		bool vsync = true;
 	};
 
 	class App {

@@ -1,9 +1,13 @@
 #pragma once
+namespace Game {
+	class Chunk;
+}
 #include <GL/glew.h>
 #include <stdint.h>
 #include <array>
 #include <glm/ext/matrix_float4x4.hpp>
 #include "block.h"
+#include "chunk_manager.h"
 
 #define CHUNK_SIZE 16
 #define CHUNK_HEIGHT 16
@@ -11,7 +15,7 @@
 namespace Game {
 	class Chunk {
 	public:
-		Chunk(const glm::vec3& offset);
+		Chunk(ChunkManager* manager, glm::ivec2 chunkPosition);
 		~Chunk();
 
 		static glm::vec2 getChunkPosition(glm::vec3 worldPosition);
@@ -34,6 +38,9 @@ namespace Game {
 
 	private:
 		glm::vec3 m_ChunkOffset;
+		glm::ivec2 m_ChunkPosition;
+
+		ChunkManager* m_Manager;
 
 		uint8_t* m_Blocks;
 		GLuint m_VertexBuffer;

@@ -1,5 +1,9 @@
 #pragma once
 
+namespace Game {
+	class ChunkManager;
+}
+
 #include <vector>
 #include <unordered_map>
 #include "chunk.h"
@@ -24,6 +28,10 @@ namespace Game {
 		
 		void update(glm::vec3 cameraPosition, float deltaTime);
 		void render(const glm::mat4& projectionViewMatrix, GLuint mpvShaderLocation);
+
+		//May return null if the given location is within a chunk that hasn't yet been generated
+		//or the given id is not registered
+		Block* getBlockAt(int worldX, int worldY, int worldZ);
 
 	private:
 		int m_RenderDistance = 8;

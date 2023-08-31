@@ -16,15 +16,10 @@ namespace Game {
 		void render() override;
 
 	private:
-		Shader* m_TriangleShader;
+		Shader* m_Shader;
 		Texture* textureAtlas;
 		Camera camera;
 
 		ChunkManager chunkManager;
-
-
-		//Temp stuff
-		GLuint vertexbuffer;
-		GLuint colorbuffer;
 	};
 }

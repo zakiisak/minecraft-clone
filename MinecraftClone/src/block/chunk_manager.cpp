@@ -18,6 +18,19 @@ namespace Game {
 		}
 	}
 
+	Block* ChunkManager::getBlockAt(int worldX, int worldY, int worldZ)
+	{
+		glm::ivec2 chunkPosition = glm::ivec2(worldX / CHUNK_SIZE, worldZ / CHUNK_SIZE);
+
+		if (m_Chunks.find(chunkPosition) != m_Chunks.end())
+		{
+			int localX = worldX - chunkPosition.x * CHUNK_SIZE;
+			int localZ = worldZ - chunkPosition.y * CHUNK_SIZE;
+			//At the moement, there is only 1 "y" layer of chunks
+			return m_Chunks[chunkPosition]->getBlockAt(localX, worldY, localZ);
+		}
+	}
+
 	void ChunkManager::updateActiveChunks(glm::vec3 cameraPosition)
 	{
 		glm::ivec2 chunkPosition = Chunk::getChunkPosition(cameraPosition + glm::vec3(CHUNK_SIZE / 2, 0, CHUNK_SIZE / 2));
@@ -49,7 +62,7 @@ namespace Game {
 				Chunk* chunk;
 				if (m_Chunks.find(chunkKey) == m_Chunks.end())
 				{
-					chunk = new Chunk(Chunk::getWorldPosition(chunkKey));
+					chunk = new Chunk(this, chunkKey);
 					chunk->build();
 					m_Chunks[chunkKey] = chunk;
 				}

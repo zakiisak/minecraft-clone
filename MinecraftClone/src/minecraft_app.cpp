@@ -23,7 +23,7 @@ namespace Game {
 
 	MinecraftApp::~MinecraftApp()
 	{
-		delete m_TriangleShader;
+		delete m_Shader;
 		delete textureAtlas;
 		//App::~App(); -- seems that we don't have to call base destructors, as they are called automatically
 	}
@@ -32,7 +32,7 @@ namespace Game {
 	{
 		//srand(time(NULL));
 
-		m_TriangleShader = new Shader("res/shaders/block/block_vertex.glsl", "res/shaders/block/block_fragment.glsl");
+		m_Shader = new Shader("res/shaders/block/block_vertex.glsl", "res/shaders/block/block_fragment.glsl");
 
 		Block::loadBlocks();
 
@@ -47,14 +47,14 @@ namespace Game {
 		// Accept fragment if it closer to the camera than the former one
 		glDepthFunc(GL_LESS);
 
-		glfwSwapInterval(0);
-
 		camera.position = glm::vec3(0, 0, -10);
 
 		glfwSetInputMode(m_Window->getHandle(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
 
 	double lastX = 0, lastY = 0;
+
+	static bool wireframe = false;
 
 	void MinecraftApp::update() {
 		if (Core::Input::isMouseButtonJustPressed(0))
@@ -65,6 +65,20 @@ namespace Game {
 		if (Core::Input::isKeyJustPressed(GLFW_KEY_ESCAPE))
 		{
 			glfwSetInputMode(m_Window->getHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		}
+		if (Core::Input::isKeyJustPressed(GLFW_KEY_V))
+		{
+			wireframe = !wireframe;
+			if (wireframe)
+			{
+				glPolygonMode(GL_FRONT, GL_LINE);
+				glPolygonMode(GL_BACK, GL_LINE);
+			}
+			else
+			{
+				glPolygonMode(GL_FRONT, GL_FILL);
+				glPolygonMode(GL_BACK, GL_FILL);
+			}
 		}
 
 		camera.controlMovement();
@@ -81,9 +95,9 @@ namespace Game {
 		ImGui::Text("pitch: %f, yaw: %f", camera.m_Pitch, camera.m_Yaw);
 		ImGui::Text("Fps: %f", getFps());
 
-		m_TriangleShader->enable();
-		GLuint matrixID = glGetUniformLocation(m_TriangleShader->getProgram(), "MVP");
-		GLuint textureLocation = glGetUniformLocation(m_TriangleShader->getProgram(), "texture");
+		m_Shader->enable();
+		GLuint matrixID = glGetUniformLocation(m_Shader->getProgram(), "MVP");
+		GLuint textureLocation = glGetUniformLocation(m_Shader->getProgram(), "texture");
 
 
 		glm::mat4 projView = camera.getProjectionMatrix() * camera.getViewMatrix();

@@ -1,38 +1,37 @@
-#include "chunk.h"
 #include <glm/gtx/common.hpp>
 #include <stdlib.h>     /* srand, rand */
 #include "../app.h"
+#include "chunk.h"
 
 namespace Game {
 
-	Game::Chunk::Chunk(const glm::vec3& offset)
+	Chunk::Chunk(ChunkManager* manager, glm::ivec2 chunkPosition)
 	{
-		m_ChunkOffset = offset;
+		m_Manager = manager;
+
+		m_ChunkPosition = chunkPosition;
+		m_ChunkOffset = getWorldPosition(chunkPosition);
 		//m_Blocks = (uint8_t*) calloc(CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE, sizeof(float));
 		m_Blocks = new uint8_t[CHUNK_SIZE * CHUNK_HEIGHT * CHUNK_SIZE];
 
 		
 		for (int i = 0; i < CHUNK_SIZE * CHUNK_HEIGHT * CHUNK_SIZE; i++)
 		{
-			m_Blocks[i] = rand() % 3;
+			m_Blocks[i] = rand() % 2 + 1;
 		}
 
 
 		/*
-		for (int x = 1; x < CHUNK_SIZE; x++)
+		for (int x = 0; x < CHUNK_SIZE; x++)
 		{
-			for (int y = 1; y < CHUNK_HEIGHT; y++)
+			for (int y = 0; y < CHUNK_HEIGHT; y++)
 			{
-				for (int z = 1; z < CHUNK_SIZE; z++)
+				for (int z = 0; z < CHUNK_SIZE; z++)
 				{
 					setBlockAt(x, y, z, 2);
 				}
 			}
-		}*/
-
-		/*
-		glPolygonMode(GL_FRONT, GL_LINE);
-		glPolygonMode(GL_BACK, GL_LINE);
+		}
 		*/
 	}
 
@@ -280,7 +279,6 @@ namespace Game {
 		int y;
 		int z;
 		glm::vec3 offset = glm::vec3();
-		bool atLeastOneFacedAdded = false;
 		for (x = 0; x < CHUNK_SIZE; x++)
 		{
 			for (y = 0; y < CHUNK_HEIGHT; y++)
@@ -290,7 +288,6 @@ namespace Game {
 					m_ReusableBlock = getBlockAt(x, y, z);
 					if (m_ReusableBlock == nullptr)
 						continue;
-					atLeastOneFacedAdded = false;
 
 					m_ReusableFaceColor = glm::vec3(randf(), randf(), randf());
 					offset.x = x;
@@ -298,9 +295,9 @@ namespace Game {
 					offset.z = z;
 					m_ReusableBlockTranslation = m_ChunkOffset + offset;
 
-					if (isBlockSolid(x, y, z - 1) == false)
+					if (isBlockSolid(x, y, z + 1) == false)
 					{
-						addBackFace();
+						addFrontFace();
 					}
 
 					if (isBlockSolid(x + 1, y, z) == false)
@@ -308,9 +305,9 @@ namespace Game {
 						addRightFace();
 					}
 
-					if (isBlockSolid(x, y, z + 1) == false)
+					if (isBlockSolid(x, y, z - 1) == false)
 					{
-						addFrontFace();
+						addBackFace();
 					}
 
 					if (isBlockSolid(x - 1, y, z) == false)
@@ -327,6 +324,7 @@ namespace Game {
 					{
 						addTopFace();
 					}
+
 				}
 			}
 		}
@@ -431,17 +429,22 @@ namespace Game {
 
 	uint8_t Chunk::getBlockIdOfPosition(int localX, int localY, int localZ)
 	{
-		int index = (localX * CHUNK_SIZE * CHUNK_HEIGHT) + (localY * CHUNK_HEIGHT) + CHUNK_SIZE;
-		if (index < 0 || index >= CHUNK_SIZE * CHUNK_HEIGHT * CHUNK_SIZE)
+		int index = (localX * CHUNK_SIZE * CHUNK_HEIGHT) + (localY * CHUNK_HEIGHT) + localZ;
+		//if (index < 0 || index >= CHUNK_SIZE * CHUNK_HEIGHT * CHUNK_SIZE)
+		if(localX < 0 || localX >= CHUNK_SIZE || localY < 0 || localY >= CHUNK_HEIGHT || localZ < 0 || localZ >= CHUNK_SIZE)
+		{
 			return 0;
+		}
 		return m_Blocks[index];
 	}
 
 	void Chunk::setBlockAt(int localX, int localY, int localZ, uint8_t blockId)
 	{
-		int index = (localX * CHUNK_SIZE * CHUNK_HEIGHT) + (localY * CHUNK_HEIGHT) + CHUNK_SIZE;
-		if (index < 0 || index >= CHUNK_SIZE * CHUNK_HEIGHT * CHUNK_SIZE)
+		int index = (localX * CHUNK_SIZE * CHUNK_HEIGHT) + (localY * CHUNK_HEIGHT) + localZ;
+		if (localX < 0 || localX >= CHUNK_SIZE || localY < 0 || localY >= CHUNK_HEIGHT || localZ < 0 || localZ >= CHUNK_SIZE)
+		{
 			return;
+		}
 		m_Blocks[index] = blockId;
 		m_Dirty = true;
 	}
@@ -456,10 +459,18 @@ namespace Game {
 		return Block::blocks[getBlockIdOfPosition(localX, localY, localZ)] != nullptr;
 	}
 
+	//May only be called from within because of possible recursion
 	bool Chunk::isBlockSolid(int localX, int localY, int localZ)
 	{
+		if (localX < 0 || localX >= CHUNK_SIZE || localY < 0 || localY >= CHUNK_HEIGHT || localZ < 0 || localZ >= CHUNK_SIZE)
+		{
+			Block* block = m_Manager->getBlockAt(m_ChunkPosition.x * CHUNK_SIZE + localX, localY, m_ChunkPosition.y * CHUNK_SIZE + localZ);
+			if (!block)
+				return false;
+			return block->isOpaque();
+		}
 		Block* block = getBlockAt(localX, localY, localZ);
-		if (block == nullptr)
+		if (!block)
 			return false;
 		return block->isOpaque();
 	}
